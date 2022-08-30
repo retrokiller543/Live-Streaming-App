@@ -10,13 +10,13 @@ services:
     volumes:
       - ./app/src:/app/src
 
-  streaming-api:
-    build: ./streaming-api
-    environment:
-      env_file: .env
-    container_name: streaming-api
-    volumes:
-      - ./streaming-api:/app/
+  node-media-server:
+    build: ./media-server
+    ports:
+      - "1935:1935"
+      - "8000:8000"
+      - "8443:8443"
+    container_name: media-server
 
   mongodb:
     image: mongo
