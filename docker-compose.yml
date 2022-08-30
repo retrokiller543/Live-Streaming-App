@@ -10,9 +10,9 @@ services:
     volumes:
       - ./app/src:/app/src
   streaming-api:
-    build: ./api
+    build: ./streaming-api
     environment:
       env_file: .env
     container_name: streaming-api
     volumes:
-      - ./api/
+      - ./streaming-api:/app/
