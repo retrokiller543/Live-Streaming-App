@@ -98,6 +98,7 @@ export default class Flvplayer extends Component {
     return (
       <video
         className={className}
+        controls
         style={Object.assign(
           {
             width: "100%",
