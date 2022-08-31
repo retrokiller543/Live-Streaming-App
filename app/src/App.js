@@ -1,15 +1,11 @@
 import "./App.css";
+import Flvplayer from "./FlvPlayer";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App w-780 h-96">
       <h1>Video Stream</h1>
-      <video id="videoPlayer" width="50%" controls muted="muted" autoPlay>
-        <source
-          src="http://localhost:8000/live/emil/index.mpd?"
-          typy="video/mp4"
-        />
-      </video>
+      <Flvplayer url={"http://localhost:8000/live/emil.flv"} type="flv" />
     </div>
   );
 }

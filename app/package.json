@@ -9,6 +9,7 @@
     "@syncfusion/ej2-react-inputs": "^20.2.45",
     "@syncfusion/ej2-react-popups": "^20.2.45",
     "@syncfusion/ej2-react-schedule": "^20.2.45",
+    "flv.js": "^1.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
