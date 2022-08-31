@@ -3,14 +3,13 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <video
-        id="videoPlayer"
-        src="https://localhost:8443/live/emil.flv"
-        width="50%"
-        controls
-        muted="muted"
-        autoPlay
-      ></video>
+      <h1>Video Stream</h1>
+      <video id="videoPlayer" width="50%" controls muted="muted" autoPlay>
+        <source
+          src="http://localhost:8000/live/emil/index.mpd?"
+          typy="video/mp4"
+        />
+      </video>
     </div>
   );
 }

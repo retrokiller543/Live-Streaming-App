@@ -1,3 +1,7 @@
-FROM illuspas/node-media-server
+FROM node
+WORKDIR /app
+COPY ./package*.json .
+RUN npm install
+COPY ./app.js .
 EXPOSE 1935 8000 8443
-CMD ["node", "bin/app.js"]
+CMD ["node", "app.js"]
