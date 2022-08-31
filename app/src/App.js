@@ -1,5 +1,5 @@
 import "./App.css";
-import Flvplayer from "./FlvPlayer";
+import Flvplayer from "./components/FlvPlayer";
 
 function App() {
   return (
