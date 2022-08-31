@@ -11,6 +11,16 @@ services:
     volumes:
       - ./app/src:/app/src
 
+  streaming-api:
+    build: ./streaming-api
+    environment:
+      env_file: .env
+    container_name: streaming-api
+    volumes:
+      - ./streaming-api:/app/
+    ports:
+      - "4000:4000"
+    
   node-media-server:
     build: ./media-server
     restart: always
