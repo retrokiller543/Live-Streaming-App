@@ -1,4 +1,5 @@
 const NodeMediaServer = require("node-media-server");
+const axios = require("axios");
 
 const config = {
   rtmp: {
@@ -27,5 +28,10 @@ const config = {
   },
 };
 
-var nms = new NodeMediaServer(config);
-nms.run();
+var NMServer = new NodeMediaServer(config);
+NMServer.run();
+
+NMServer.on("prePublish", (id, StreamPath, args) => {
+	axios.get()
+});
+
