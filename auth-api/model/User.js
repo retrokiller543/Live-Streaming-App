@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -26,6 +27,10 @@ const userSchema = new mongoose.Schema({
     max: 1024,
   },
   streamkey: {
+    type: String,
+    required: true,
+  },
+  uuid: {
     type: String,
     required: true,
   },
