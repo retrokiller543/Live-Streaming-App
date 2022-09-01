@@ -38,11 +38,15 @@ services:
   node-media-server:
     build: ./media-server
     restart: always
+    environment:
+      env_file: .env
     ports:
       - "1935:1935"
       - "8000:8000"
       - "8443:8443"
     container_name: media-server
+    networks:
+      - mongodb
 
   mongodb:
     image: mongo
