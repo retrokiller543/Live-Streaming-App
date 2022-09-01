@@ -45,6 +45,8 @@ services:
       - "8000:8000"
       - "8443:8443"
     container_name: media-server
+    # volumes:
+    #   - ./media-server:/app/
     networks:
       - mongodb
 
