@@ -1,7 +1,7 @@
 const NodeMediaServer = require("node-media-server");
 const axios = require("axios");
 
-const AUTHURL = "http://localhost:4000/api/live/auth";
+const AUTHURL = "http://auth-api:4000/api/live/auth";
 
 const config = {
   rtmp: {
@@ -37,7 +37,7 @@ NMServer.on("prePublish", (id, StreamPath, args) => {
 	axios.post(AUTHURL)
 	.then(res => {
 		console.log(`received status code: ${res.status}`);
-		console.log(`response: ${res}`);
+		console.log(`response: ${res.data}`);
 	})
 	.catch(error => {
 		console.error(`Error: ${error}`);

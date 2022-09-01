@@ -5,9 +5,9 @@ router.post("/auth", async (req, res) => {
 	{
 		res.status(200).send("[+] Authenticated successfully . . .");	
 	}
-	catch(error) 
+	catch (error) 
 	{
-		console.log(error);
+		res.status(400).send(error);
 	}
 });
 
