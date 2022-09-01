@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     min: 8,
     max: 1024,
   },
+  streamkey: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,
