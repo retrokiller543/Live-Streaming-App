@@ -7,7 +7,12 @@ const authRoute = require("./routes/auth");
 
 dotenv.config();
 
-mongoose.connect(process.env.DB_CONNECT, () => console.log("Connected to db!"));
+mongoose.connect(process.env.DB_CONNECT);
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
+  console.log("Connected to DB!");
+});
 
 app.use(express.json());
 
