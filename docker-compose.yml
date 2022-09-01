@@ -18,16 +18,6 @@ services:
       - mongodb
       - mongo-express
 
-  # streaming-api:
-  #   build: ./streaming-api
-  #   environment:
-  #     env_file: .env
-  #   container_name: streaming-api
-  #   volumes:
-  #     - ./streaming-api:/app/
-  #   ports:
-  #     - "4000:4000"
-
   auth-api:
     build: ./auth-api
     environment:
