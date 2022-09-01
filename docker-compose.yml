@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.1"
 services:
   app:
     build: ./app
@@ -10,6 +10,13 @@ services:
     container_name: app
     volumes:
       - ./app/src:/app/src
+    links:
+      - mongodb:mongodb
+    networks:
+      - mongodb
+    depends_on:
+      - mongodb
+      - mongo-express
 
   # streaming-api:
   #   build: ./streaming-api
@@ -33,6 +40,8 @@ services:
     depends_on:
       - mongodb
       - mongo-express
+    links:
+      - mongodb:mongodb
     networks:
       - mongodb
 

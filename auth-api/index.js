@@ -7,7 +7,11 @@ const authRoute = require("./routes/auth");
 
 dotenv.config();
 
-mongoose.connect(process.env.DB_CONNECT);
+mongoose.connect(process.env.DB_URL, {
+  dbName: process.env.DB,
+  user: process.env.DB_USER,
+  pass: process.env.DB_PASSWORD,
+});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
