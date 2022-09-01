@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^16.0.2",
     "express": "^4.17.0",
+    "joi": "^17.6.0",
     "mongoose": "^6.5.4",
     "nodemon": "^1.19.0"
   }
