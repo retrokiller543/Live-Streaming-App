@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../model/User");
 const Str = require("@supercharge/strings");
 const { v4: uuidv4 } = require("uuid");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 
@@ -97,7 +98,9 @@ router.post("/login", async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) return res.status(400).send("Invalid email or password!");
 
-  res.send("Logged in!");
+  // CREATE AND ASSIGN JWT
+  const token = jwt.sign({ uuid: user.uuid }, process.env.TOKEN_SECRET);
+  res.header("auth-token", token).send(token);
 });
 
 module.exports = router;
