@@ -1,13 +1,26 @@
-import "./App.css";
-import Flvplayer from "./components/FlvPlayer";
+import { Routes, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Video Stream</h1>
-      <Flvplayer url={"http://83.251.107.12:8000/live/emil.flv"} type="flv" />
-    </div>
-  );
-}
+import { Login, UserProfile, Video } from "./pages/index";
+
+// import Flvplayer from "./components/FlvPlayer";
+
+import "./App.css";
+
+// const checkLoginStatus = () => {};
+
+// const checkToken = (to, from, next) => {
+//   console.log(to);
+//   console.log(from);
+//   console.log(next);
+//   next();
+// };
+
+const App = () => {
+  <Routes>
+    <Route path="/" element={<Video />} />
+    <Route path="/users/user/profile" element={<UserProfile />} />
+    <Route path="/login" element={<Login />} />
+  </Routes>;
+};
 
 export default App;
