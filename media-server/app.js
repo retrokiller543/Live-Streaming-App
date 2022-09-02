@@ -59,36 +59,43 @@ NMServer.run();
 
 NMServer.on("preConnect", (id, StreamPath, args) => {
   let session = NMServer.getSession(id);
-  count = 0;
   session.socket.on("data", (data) => 
   {
-    if (data.toString("utf-8") != undefined && count != 1) 
+    if (data.toString("utf-8") != undefined) 
     {
-      data = data.toString("utf-8").replace(/[\x00-\x1F\x7F-\xA0]+/g, "");
-
-      console.dir(`DATA: ${data} . . .`);
-
-      data = data.trim().slice(2);
+      // use toString in order to get a string that we can manipulate
+      // replace all hex characters with blanks as hexadecimal is not a valid input for this section
+      // use trim to remove all leading and trailing whitespaces that can cause unexpected behavior
+      // slice to remove first 2 identification chars from packet data as they are insignificant for this section
+      data = data.toString("utf-8").replace(/[\x00-\x1F\x7F-\xA0]+/g, "").trim().slice(2); 
+     
       if (data.startsWith("releaseStream@"))
       {
         console.dir("RTMP STREAM INBOUND [preConnect]: [" + data + "]");
         const uuidRegex = new RegExp(/(?<=releaseStream@.).+?(?=\?)+/g, "");
         const streamkeyRegex = new RegExp(/key=(\w+)+/g, "");
-        
-        let uuidMatch = data.match(uuidRegex);
-        let streamkeyMatch = data.match(streamkeyRegex);
+        const uuidMatch = data.match(uuidRegex);
+        const streamkeyMatch = data.match(streamkeyRegex);
         if (uuidMatch && streamkeyMatch)
         {
           let uuid = uuidMatch[0]; // index [0] == "UUID" index [1] == NULL
           let streamkey = streamkeyMatch[1]; // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
-          console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
+
+          const usernameExists = streamkey.match(/.+?(?=_)/g, "");
+          const randStrExists = streamkey.match(/_\w+/g, "");
+
+          if (usernameExists != null && randStrExists != null)
+          {      
+            const username = usernameExists[0]; // index [0] == "USERNAME" index [1] == "START OF RANDOM STRING"
+            const randStr  = randStrExists[0];  // index [0] == "RANDOM STRING" index [1] == NULL
+
+            console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
+            console.dir(`[[username: ${username}], [randStr: ${randStr}]]`);
+          }
+          else { session.reject(); }
         }
-        else 
-        {
-          session.reject();
-        }
+        else { session.reject(); }
       }
-      count += 1;
     }
   });
 });
@@ -96,15 +103,5 @@ NMServer.on("preConnect", (id, StreamPath, args) => {
 /*
 NMServer.on("postConnect", (id, StreamPath, args) => 
 {
-  axios.post(AUTHURL)
-       .then((req, res) => 
-       {
-        console.dir(`[+] Request: ${req} . . .`)
-        console.dir(`[+] Response: ${res} . . .`);
-       })
-       .catch((error) => 
-       {
-        console.log(`[-] Error: ${error} . . .`);
-       });
 });
 */
