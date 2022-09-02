@@ -59,25 +59,41 @@ NMServer.run();
 
 NMServer.on("preConnect", (id, StreamPath, args) => {
   let session = NMServer.getSession(id);
-  count = 0
+  count = 0;
   session.socket.on("data", (data) => 
   {
-    if (data.toString("utf-8") != undefined) 
+    if (data.toString("utf-8") != undefined && count != 1) 
     {
       data = data.toString("utf-8").replace(/[\x00-\x1F\x7F-\xA0]+/g, "");
 
-      if (data.startsWith("CJreleaseStream@-"))
+      console.dir(`DATA: ${data} . . .`);
+
+      data = data.trim().slice(2);
+      if (data.startsWith("releaseStream@"))
       {
-        console.dir("CONNECTION CANDIDATE INBOUND: [" + data + "]");
-        const uuidRegex = new RegExp(/(?<=releaseStream@-).+?(?=\?)+/g, "");
+        console.dir("RTMP STREAM INBOUND [preConnect]: [" + data + "]");
+        const uuidRegex = new RegExp(/(?<=releaseStream@.).+?(?=\?)+/g, "");
         const streamkeyRegex = new RegExp(/key=(\w+)+/g, "");
-        let uuid = data.match(uuidRegex)[0] // index [0] == "UUID" index [1] == NULL
-        let streamkey = data.match(streamkeyRegex)[1] // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
+        
+        let uuidMatch = data.match(uuidRegex);
+        let streamkeyMatch = data.match(streamkeyRegex);
+        if (uuidMatch && streamkeyMatch)
+        {
+          let uuid = uuidMatch[0]; // index [0] == "UUID" index [1] == NULL
+          let streamkey = streamkeyMatch[1]; // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
+          console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
+        }
+        else 
+        {
+          session.reject();
+        }
       }
+      count += 1;
     }
   });
 });
 
+/*
 NMServer.on("postConnect", (id, StreamPath, args) => 
 {
   axios.post(AUTHURL)
@@ -91,3 +107,4 @@ NMServer.on("postConnect", (id, StreamPath, args) =>
         console.log(`[-] Error: ${error} . . .`);
        });
 });
+*/
