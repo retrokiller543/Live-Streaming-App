@@ -3,21 +3,26 @@ const axios = require("axios");
 
 const AUTHURL = "http://auth-api:4000/api/live/auth";
 
-const config = {
-  rtmp: {
+const config = 
+{
+  rtmp: 
+  {
     port: 1935,
     chunk_size: 60000,
     gop_cache: true,
     ping: 60,
     ping_timeout: 30,
   },
-  http: {
+  http: 
+  {
     port: 8000,
     mediaroot: "./media",
     allow_origin: "*",
   },
-  trans: {
-    tasks: [
+  trans: 
+  {
+    tasks: 
+    [
       {
         app: "live",
         ac: "aac",
@@ -33,15 +38,56 @@ const config = {
 var NMServer = new NodeMediaServer(config);
 NMServer.run();
 
-NMServer.on("prePublish", (id, StreamPath, args) => {
-  axios
-    .post(AUTHURL)
-    .then((res) => {
-      // console.log(res);
-      console.log(`received status code: ${res.status}`);
-      console.log(`response: ${res.data.text}`);
-    })
-    .catch((error) => {
-      console.error(`Error: ${error}`);
-    });
+/*
+# order of NodeMediaServer :
+#                            0 -> request connect
+#                            1. preConnect
+#                               1.1 connect
+#                            2. postConnect
+#                               2.1 after connection has been made
+#                            3. prePublish
+#                               3.1 publish rtmp stream
+#                            4. postPublish
+#                               4.1 after rtmp stream has been published
+#                               4.2 handle audio & video
+#                               4.3 close stream
+#                            5. donePublish
+#                               5.1 rtmp disconnect
+#                            6. doneConnect
+#                               6.1 cleanup (close & disconnect) connection
+*/                        
+
+NMServer.on("preConnect", (id, StreamPath, args) => {
+  let session = NMServer.getSession(id);
+  count = 0
+  session.socket.on("data", (data) => 
+  {
+    if (data.toString("utf-8") != undefined) 
+    {
+      data = data.toString("utf-8").replace(/[\x00-\x1F\x7F-\xA0]+/g, "");
+
+      if (data.startsWith("CJreleaseStream@-"))
+      {
+        console.dir("CONNECTION CANDIDATE INBOUND: [" + data + "]");
+        const uuidRegex = new RegExp(/(?<=releaseStream@-).+?(?=\?)+/g, "");
+        const streamkeyRegex = new RegExp(/key=(\w+)+/g, "");
+        let uuid = data.match(uuidRegex)[0] // index [0] == "UUID" index [1] == NULL
+        let streamkey = data.match(streamkeyRegex)[1] // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
+      }
+    }
+  });
+});
+
+NMServer.on("postConnect", (id, StreamPath, args) => 
+{
+  axios.post(AUTHURL)
+       .then((req, res) => 
+       {
+        console.dir(`[+] Request: ${req} . . .`)
+        console.dir(`[+] Response: ${res} . . .`);
+       })
+       .catch((error) => 
+       {
+        console.log(`[-] Error: ${error} . . .`);
+       });
 });
