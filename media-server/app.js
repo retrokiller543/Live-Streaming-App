@@ -91,6 +91,19 @@ NMServer.on("preConnect", (id, StreamPath, args) => {
 
             console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
             console.dir(`[[username: ${username}], [randStr: ${randStr}]]`);
+
+            axios
+            .post(AUTHURL, { uuid: uuid, user: username }) // No post url needs to be set as default is configured to authentication api url
+            .then((res) => {
+              console.dir("RESPONSE FROM AUTH-API: " + JSON.stringify(res.data));
+              if (res.data.allow_access === true)
+              {
+                console.dir("[+] Authorized successfully . . .");
+              } else { session.reject(); }
+            })
+            .catch((error) => {
+              console.error("ERROR ON REQUEST TO AUTH-API: " + JSON.stringify(error));
+            });
           }
           else { session.reject(); }
         }
@@ -99,9 +112,3 @@ NMServer.on("preConnect", (id, StreamPath, args) => {
     }
   });
 });
-
-/*
-NMServer.on("postConnect", (id, StreamPath, args) => 
-{
-});
-*/
