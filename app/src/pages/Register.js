@@ -5,31 +5,43 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
-// import axios from "./api/axios";
+// import axios from "axios";
+import axios from "./api/axios";
+
+import { useStateContext } from "../contexts/ContextProvider";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = "http://localhost:4000/api/user/register";
+const REGISTER_URL = "/api/user/register";
 
 const Register = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [validName, setValidName] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
-
-  const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
-
-  const [matchPwd, setMatchPwd] = useState("");
-  const [validMatch, setValidMatch] = useState(false);
-  const [matchFocus, setMatchFocus] = useState(false);
-
-  const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
+  const {
+    user,
+    setUser,
+    validName,
+    setValidName,
+    userFocus,
+    setUserFocus,
+    pwd,
+    setPwd,
+    validPwd,
+    setValidPwd,
+    pwdFocus,
+    setPwdFocus,
+    matchPwd,
+    setMatchPwd,
+    validMatch,
+    setValidMatch,
+    matchFocus,
+    setMatchFocus,
+    errMsg,
+    setErrMsg,
+    success,
+    setSuccess,
+  } = useStateContext();
 
   useEffect(() => {
     userRef.current.focus();
