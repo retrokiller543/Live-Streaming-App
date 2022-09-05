@@ -74,42 +74,40 @@ NMServer.on("preConnect", (id, StreamPath, args) => {
         console.dir("RTMP STREAM INBOUND [preConnect]: [" + data + "]");
         const uuidRegex = new RegExp(/(?<=releaseStream@.).+?(?=\?)+/g, "");
         const streamkeyRegex = new RegExp(/key=(\w+)+/g, "");
-        const uuidMatch = data.match(uuidRegex);
+        
+	const uuidMatch = data.match(uuidRegex);
         const streamkeyMatch = data.match(streamkeyRegex);
-        if (uuidMatch && streamkeyMatch)
-        {
-          let uuid = uuidMatch[0]; // index [0] == "UUID" index [1] == NULL
-          let streamkey = streamkeyMatch[1]; // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
+        
+	if (!uuidMatch || !streamkeyMatch) session.reject();
 
-          const usernameExists = streamkey.match(/.+?(?=_)/g, "");
-          const randStrExists = streamkey.match(/_\w+/g, "");
+        let uuid = uuidMatch[0]; // index [0] == "UUID" index [1] == NULL
+        let streamkey = streamkeyMatch[1]; // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
 
-          if (usernameExists != null && randStrExists != null)
-          {      
-            const username = usernameExists[0]; // index [0] == "USERNAME" index [1] == "START OF RANDOM STRING"
-            const randStr  = randStrExists[0];  // index [0] == "RANDOM STRING" index [1] == NULL
+        const usernameExists = streamkey.match(/.+?(?=_)/g, "");
+        const randStrExists = streamkey.match(/_\w+/g, "");
 
-            console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
-            console.dir(`[[username: ${username}], [randStr: ${randStr}]]`);
+        if (usernameExists === null || randStrExists === null) session.reject();
 
-            axios
-            .post(AUTHURL, { uuid: uuid, user: username }) 
-            .then((res) => {
-              console.dir("RESPONSE FROM AUTH-API: " + JSON.stringify(res.data));
-              if (res.data.allow_access === true)
-              {
+        const username = usernameExists[0]; // index [0] == "USERNAME" index [1] == "START OF RANDOM STRING"
+        const randStr  = randStrExists[0];  // index [0] == "RANDOM STRING" index [1] == NULL
+
+        console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
+        console.dir(`[[username: ${username}], [randStr: ${randStr}]]`);
+
+        axios
+        .post(AUTHURL, { uuid: uuid, user: username }) 
+        .then((res) => {
+            console.dir("RESPONSE FROM AUTH-API: " + JSON.stringify(res.data));
+            if (res.data.allow_access === true)
+            {
                 console.dir("[+] Authorized successfully . . .");
-              } 
-	      else { session.reject(); }
-            })
-            .catch((error) => {
-		console.error("ERROR ON REQUEST TO AUTH-API: " + JSON.stringify(error));
-		session.reject();
-            });
-          }
-          else { session.reject(); }
-        }
-        else { session.reject(); }
+            } 
+	    else { session.reject(); }
+	})
+        .catch((error) => {
+	    console.error("ERROR ON REQUEST TO AUTH-API: " + JSON.stringify(error));
+	    session.reject();
+	});
       }
     }
   });
