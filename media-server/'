@@ -96,15 +96,14 @@ NMServer.on("preConnect", (id, StreamPath, args) => {
             .post(AUTHURL, { uuid: uuid, user: username }) 
             .then((res) => {
               console.dir("RESPONSE FROM AUTH-API: " + JSON.stringify(res.data));
+	      console.dir("RESPONSE ACCESS TRUE | FALSE: " + res.data.allow_access);
               if (res.data.allow_access === true)
               {
                 console.dir("[+] Authorized successfully . . .");
-              } 
-	      else { session.reject(); }
+              } else { session.reject(); }
             })
             .catch((error) => {
 		console.error("ERROR ON REQUEST TO AUTH-API: " + JSON.stringify(error));
-		session.reject();
             });
           }
           else { session.reject(); }
