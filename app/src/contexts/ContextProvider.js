@@ -4,7 +4,11 @@ const StateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [validName, setValidName] = useState(false);
+  const [validFullName, setValidFullName] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
   const [pwd, setPwd] = useState("");
@@ -17,6 +21,8 @@ export const ContextProvider = ({ children }) => {
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
+
+  const [auth, setAuth] = useState({});
 
   return (
     <StateContext.Provider
@@ -43,6 +49,16 @@ export const ContextProvider = ({ children }) => {
         setErrMsg,
         success,
         setSuccess,
+        validFullName,
+        setValidFullName,
+        fullName,
+        setFullName,
+        validEmail,
+        setValidEmail,
+        email,
+        setEmail,
+        auth,
+        setAuth,
       }}
     >
       {children}
