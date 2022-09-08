@@ -6,15 +6,14 @@ import "./App.css";
 
 const App = () => {
   return (
-    <div>
-      The comp is loading...
+    <main className="App">
       <Routes>
         <Route path="/" element={<Video />} />
         <Route path="/users/user/profile" element={<UserProfile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
-    </div>
+    </main>
   );
 };
 

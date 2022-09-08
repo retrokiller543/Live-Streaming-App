@@ -21,14 +21,14 @@ router.post("/register", async (req, res) => {
   const emailExist = await User.findOne({ email: req.body.email });
   if (emailExist)
     return res
-      .status(400)
+      .status(409)
       .send(
         `User with this email "${req.body.email}" already exists, please try another email!`
       );
   const usernameExists = await User.findOne({ username: req.body.username });
   if (usernameExists)
     return res
-      .status(400)
+      .status(409)
       .send(
         `User with this username "${req.body.username}" already exists, please try another username`
       );
@@ -100,7 +100,7 @@ router.post("/login", async (req, res) => {
 
   // CREATE AND ASSIGN JWT
   const token = jwt.sign({ uuid: user.uuid }, process.env.TOKEN_SECRET);
-  res.header("auth-token", token).status(202);
+  res.header("accessToken", token).status(202);
 });
 
 module.exports = router;

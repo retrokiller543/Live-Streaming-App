@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   faCheck,
   faTimes,
@@ -89,9 +90,12 @@ const Register = () => {
     try {
       const response = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ user, fullName, pwd }),
+        JSON.stringify({ username: user, fullName, password: pwd, email }),
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
           withCredentials: true,
         }
       );
@@ -100,15 +104,17 @@ const Register = () => {
       console.log(JSON.stringify(response));
       setSuccess(true);
       //clear state and controlled inputs
-      //need value attrib on inputs for this
       setUser("");
+      setEmail("");
+      setFullName("");
       setPwd("");
       setMatchPwd("");
     } catch (err) {
+      console.log(JSON.stringify(err.response));
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 409) {
-        setErrMsg("Username Taken");
+        setErrMsg(err.response);
       } else {
         setErrMsg("Registration Failed");
       }
@@ -122,7 +128,7 @@ const Register = () => {
         <section>
           <h1>Success!</h1>
           <p>
-            <a href="#">Sign In</a>
+            <Link to="/login">Sign In</Link>
           </p>
         </section>
       ) : (
@@ -330,8 +336,7 @@ const Register = () => {
             Already registered?
             <br />
             <span className="line">
-              {/*put router link here*/}
-              <a href="#">Sign In</a>
+              <Link to="/login">Sign In</Link>
             </span>
           </p>
         </section>
