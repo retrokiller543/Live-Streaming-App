@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.2",
     "node-media-server": "^2.4.7"
   }
 }

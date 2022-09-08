@@ -1,17 +1,20 @@
+import { Routes, Route } from "react-router-dom";
+
+import { Register, Video, UserProfile, Login } from "./pages/index";
+
 import "./App.css";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <h1>Video Stream</h1>
-      <video id="videoPlayer" width="50%" controls muted="muted" autoPlay>
-        <source
-          src="http://localhost:8000/live/emil/index.mpd?"
-          typy="video/mp4"
-        />
-      </video>
-    </div>
+    <main className="App">
+      <Routes>
+        <Route path="/" element={<Video />} />
+        <Route path="/users/user/profile" element={<UserProfile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </main>
   );
-}
+};
 
 export default App;

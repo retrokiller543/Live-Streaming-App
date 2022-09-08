@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.1"
 services:
   app:
     build: ./app
@@ -10,15 +10,45 @@ services:
     container_name: app
     volumes:
       - ./app/src:/app/src
+    links:
+      - mongodb:mongodb
+    networks:
+      - mongodb
+    depends_on:
+      - mongodb
+      - mongo-express
+
+  auth-api:
+    build: ./auth-api
+    environment:
+      env_file: .env
+    container_name: auth-api
+    volumes:
+      - ./auth-api:/app/
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
+      - mongo-express
+    links:
+      - mongodb:mongodb
+    networks:
+      - mongodb
 
   node-media-server:
     build: ./media-server
     restart: always
+    environment:
+      env_file: .env
     ports:
       - "1935:1935"
       - "8000:8000"
       - "8443:8443"
     container_name: media-server
+    # volumes:
+    #   - ./media-server:/app/
+    networks:
+      - mongodb
 
   mongodb:
     image: mongo
