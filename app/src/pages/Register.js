@@ -59,23 +59,28 @@ const Register = () => {
 
   useEffect(() => {
     setValidName(USER_REGEX.test(user));
+    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
     setValidFullName(NAME_REGEX.test(fullName));
+    // eslint-disable-next-line
   }, [fullName]);
 
   useEffect(() => {
     setValidEmail(EMAIL_REGEX.test(email));
+    // eslint-disable-next-line
   }, [email]);
 
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(pwd));
     setValidMatch(pwd === matchPwd);
+    // eslint-disable-next-line
   }, [pwd, matchPwd]);
 
   useEffect(() => {
     setErrMsg("");
+    // eslint-disable-next-line
   }, [user, fullName, email, pwd, matchPwd]);
 
   const handleSubmit = async (e) => {
