@@ -30,6 +30,7 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg("");
+    // eslint-disable-next-line
   }, [email, pwd]);
 
   const handleSubmit = async (e) => {
