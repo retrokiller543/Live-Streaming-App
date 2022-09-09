@@ -1,13 +1,20 @@
-import "./App.css";
-import Flvplayer from "./components/FlvPlayer";
+import { Routes, Route } from "react-router-dom";
 
-function App() {
+import { Register, Video, UserProfile, Login } from "./pages/index";
+
+import "./App.css";
+
+const App = () => {
   return (
-    <div className="App">
-      <h1>Video Stream</h1>
-      <Flvplayer url={"http://localhost:8000/live/emil.flv"} type="flv" />
-    </div>
+    <main className="App">
+      <Routes>
+        <Route path="/" element={<Video />} />
+        <Route path="/users/user/profile" element={<UserProfile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </main>
   );
-}
+};
 
 export default App;

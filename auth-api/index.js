@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const userAuthRoute = require("./routes/userAuth");
 const liveAuthRoute = require("./routes/streamAuth");
+const posts = require("./routes/verifyLogin");
 
 dotenv.config();
 
@@ -23,5 +24,6 @@ app.use(express.json());
 
 app.use("/api/user", userAuthRoute);
 app.use("/api/live", liveAuthRoute);
+app.use("/api/user", posts);
 
 app.listen(4000, () => console.log("Server up and running"));
