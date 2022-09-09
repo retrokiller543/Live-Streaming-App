@@ -17,7 +17,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.4",
-    "nodemon": "^1.19.0",
+    "nodemon": "^1.19.4"
     "uuid": "^8.3.2"
   }
 }
