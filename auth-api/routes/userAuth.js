@@ -103,4 +103,23 @@ router.post("/login", async (req, res) => {
   res.header("accessToken", token).status(202);
 });
 
+router.get("/retUsers", async (req, res) => {
+    var query = User.find({}).select('username -_id');
+    query.exec((err, data) => 
+    {
+        if (err) return next(err);
+	var JSONRes = { users: null };
+
+	users = Array();
+	for(let i = 0; i < data.length; i++) 
+	{ 
+		users.push(data[i].username); 
+	}
+
+	JSONRes.users = JSON.stringify(users);
+	res.status(200).send(data);
+    });
+	//res.status(200).send(AllUsers);
+});
+
 module.exports = router;
