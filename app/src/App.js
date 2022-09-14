@@ -33,7 +33,11 @@ const App = () => {
                 path={`/users/${user}/profile`}
                 element={<UserProfile />}
               />
-              <Route path={`/users/${user}/live`} element={<Video />} />
+              <Route
+                key={index}
+                path={`/users/${user}/live`}
+                element={<Video />}
+              />
             </div>
           );
         })}
