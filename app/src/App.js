@@ -5,7 +5,7 @@ import { Register, Video, UserProfile, Login } from "./pages/index";
 
 import "./App.css";
 
-const API_URL = "/api/users/";
+const API_URL = "/api/users/retUsers";
 
 const App = () => {
   const getUsers = async () => {
@@ -17,7 +17,7 @@ const App = () => {
         },
         withCredentials: false,
       });
-      console.log(res);
+      return JSON.parse(res.users);
     } catch (err) {
       console.log(err);
     }
@@ -25,15 +25,15 @@ const App = () => {
   return (
     <main className="App">
       <Routes>
-        {Object.values(getUsers()).map((value, index) => {
+        {getUsers().map((user, index) => {
           return (
             <div>
               <Route
                 key={index}
-                path={`/users/${value}/profile`}
+                path={`/users/${user}/profile`}
                 element={<UserProfile />}
               />
-              <Route path={`/users/${value}/live`} element={<Video />} />
+              <Route path={`/users/${user}/live`} element={<Video />} />
             </div>
           );
         })}
