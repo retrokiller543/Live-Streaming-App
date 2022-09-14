@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
@@ -20,6 +21,7 @@ db.once("open", function () {
   console.log("Connected to DB!");
 });
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/user", userAuthRoute);

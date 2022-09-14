@@ -15,8 +15,8 @@ router.post("/auth", async (req, res) => {
  
     const UserFound = await User.findOne({ $and: 
 						[{ username: { $eq: req.body.user } },
-                                                 { uuid: { $eq: req.body.uuid } }] 
-                                         });
+            { uuid: { $eq: req.body.uuid } }] 
+});
     if (UserFound) auth_decision.allow_access = true;
     res.status(200).send(auth_decision);
   } catch (error) { 

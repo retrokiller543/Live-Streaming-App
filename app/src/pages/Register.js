@@ -101,7 +101,7 @@ const Register = () => {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
           },
-          withCredentials: true,
+          withCredentials: false,
         }
       );
       console.log(response?.data);

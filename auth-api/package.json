@@ -12,12 +12,13 @@
   "dependencies": {
     "@supercharge/strings": "^1.28.0",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.17.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.4",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
     "uuid": "^8.3.2"
   }
 }
