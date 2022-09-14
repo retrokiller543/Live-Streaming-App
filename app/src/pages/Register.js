@@ -10,9 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { axios } from "../api/index";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const NAME_REGEX = /^[A-z]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const USER_REGEX = /^[A-z][A-z0-9-_]{5,254}$/;
+const NAME_REGEX = /^[A-z]{1,254}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{7,63}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REGISTER_URL = "/api/user/register";
 
@@ -178,7 +178,7 @@ const Register = () => {
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
-              4 to 24 characters.
+              6 to 255 characters.
               <br />
               Must begin with a letter.
               <br />
@@ -218,7 +218,7 @@ const Register = () => {
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
-              4 to 24 characters.
+              2 to 255 characters.
               <br />
               Must begin with a letter.
               <br />
@@ -286,7 +286,7 @@ const Register = () => {
               className={pwdFocus && !validPwd ? "instructions" : "offscreen"}
             >
               <FontAwesomeIcon icon={faInfoCircle} />
-              8 to 24 characters.
+              8 to 64 characters.
               <br />
               Must include uppercase and lowercase letters, a number and a
               special character.
