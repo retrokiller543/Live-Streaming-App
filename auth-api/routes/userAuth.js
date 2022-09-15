@@ -70,8 +70,8 @@ router.post("/register", async (req, res) => {
   }
 
   const user = new User({
-    fullName: req.body.fullName,
-    username: req.body.username,
+    fullName: req.body.fullName.toLowerCase(),
+    username: req.body.username.toLowerCase(),
     email: req.body.email,
     password: hashedPassword,
     streamkey: streamkey,
