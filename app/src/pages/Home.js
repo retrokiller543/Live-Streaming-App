@@ -23,7 +23,7 @@ const Home = () => {
       }
     };
     fetchUsers();
-  });
+  }, []);
   return (
     <>
       {users.map((user, index) => {
