@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { axios } from "./api/index";
 
-import { Register, Video, UserProfile, Login } from "./pages/index";
+import { Register, UserProfile, Login } from "./pages/index";
 
 import "./App.css";
 
@@ -21,7 +21,6 @@ const App = () => {
           withCredentials: false,
         });
         setUsers(res.data);
-        console.log(users);
       } catch (err) {
         console.log(err);
       }
@@ -34,18 +33,11 @@ const App = () => {
       <Routes>
         {users.map((user) => {
           return (
-            <div>
-              <Route
-                key={user.uuid}
-                path={`/users/${user.username}/profile`}
-                element={<UserProfile />}
-              />
-              <Route
-                key={user.uuid}
-                path={`/users/${user.username}/live`}
-                element={<Video />}
-              />
-            </div>
+            <Route
+              key={user.uuid}
+              path={`/users/${user.username}/profile`}
+              element={<UserProfile />}
+            />
           );
         })}
         <Route path="/" element={<Login />} />
