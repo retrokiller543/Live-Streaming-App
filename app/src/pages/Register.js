@@ -130,14 +130,14 @@ const Register = () => {
   return (
     <>
       {success ? (
-        <section>
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
           <h1>Success!</h1>
           <p>
             <Link to="/login">Sign In</Link>
           </p>
         </section>
       ) : (
-        <section>
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -146,7 +146,10 @@ const Register = () => {
             {errMsg}
           </p>
           <h1>Register</h1>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-evenly flex-grow pb-4"
+          >
             <label htmlFor="username">
               Username:
               <FontAwesomeIcon

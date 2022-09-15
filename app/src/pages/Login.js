@@ -68,11 +68,11 @@ const Login = () => {
   return (
     <>
       {success ? (
-        <section>
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
           <p>You are logged in!</p>
         </section>
       ) : (
-        <section>
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -81,7 +81,10 @@ const Login = () => {
             {errMsg}
           </p>
           <h1>Login</h1>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-evenly flex-grow pb-4"
+          >
             <lable htmlFor="email">Email:</lable>
             <input
               type="text"

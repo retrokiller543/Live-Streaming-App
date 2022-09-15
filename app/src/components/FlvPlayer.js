@@ -94,19 +94,7 @@ export default class Flvplayer extends Component {
   }
 
   render() {
-    const { className, style } = this.props;
-    return (
-      <video
-        className={className}
-        controls
-        style={Object.assign(
-          {
-            width: "100%",
-          },
-          style
-        )}
-        ref={this.initFlv}
-      />
-    );
+    const { className } = this.props;
+    return <video className={className} controls ref={this.initFlv} />;
   }
 }

@@ -1,9 +1,10 @@
 export const Links = [
   {
-    title: "Profile",
+    title: "User",
     links: [
       {
         name: "profile",
+        path: "profile",
         icon: "",
       },
     ],
@@ -13,7 +14,13 @@ export const Links = [
     title: "Browse",
     links: [
       {
-        name: "browse",
+        name: "Users",
+        path: "/users",
+        icon: "",
+      },
+      {
+        name: "Videos",
+        path: "/users/videos",
         icon: "",
       },
     ],
