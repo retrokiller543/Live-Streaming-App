@@ -24,6 +24,8 @@ export const ContextProvider = ({ children }) => {
 
   const [auth, setAuth] = useState({});
 
+  const [users, setUsers] = useState([]);
+
   return (
     <StateContext.Provider
       value={{
@@ -59,6 +61,8 @@ export const ContextProvider = ({ children }) => {
         setEmail,
         auth,
         setAuth,
+        users,
+        setUsers,
       }}
     >
       {children}

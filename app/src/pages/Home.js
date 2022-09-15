@@ -1,35 +1,15 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { axios } from "../api/index";
 
-const API_URL = "/api/user/retUsers";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const Home = () => {
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get(API_URL, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          withCredentials: false,
-        });
-        setUsers(res.data);
-        console.log(users);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const { users } = useStateContext();
+
   return (
     <>
       {users.map((user, index) => {
         const person = JSON.stringify(user.username);
-        console.log(person);
-        console.log("its looping");
+        // const uuid = JSON.stringify(user.uuid);
         return (
           <div key={index}>
             <Link key={index} to={`/users/${person}/profile`}>
