@@ -76,6 +76,7 @@ router.post("/register", async (req, res) => {
     password: hashedPassword,
     streamkey: streamkey,
     uuid: userID,
+    randStr: random_str,
   });
   try {
     const savedUser = await user.save();

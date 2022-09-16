@@ -57,65 +57,101 @@ NMServer.run();
 #                               6.1 cleanup (close & disconnect) connection
 */                        
 
-NMServer.on("preConnect", (id, StreamPath, args) => {
+NMServer.on("preConnect", (id, args) => 
+{ 
   let session = NMServer.getSession(id);
   try 
   {
-    session.socket.on("data", (data) => 
+    var Errors = []; 
+    axios 
+    .post(AUTHURL, { type: "newID", SESSID: id })
+    .then((res) => 
     {
-      if (data.toString("utf-8") != undefined) 
-      {
-        // use toString in order to get a string that we can manipulate
-        // replace all hex characters with blanks as hexadecimal is not a valid input for this section
-        // use trim to remove all leading and trailing whitespaces that can cause unexpected behavior
-        // slice to remove first 2 identification chars from packet data as they are insignificant for this section
-        data = data.toString("utf-8").replace(/[\x00-\x1F\x7F-\xA0]+/g, "").trim().slice(2); 
-     
-        if (data.startsWith("releaseStream@"))
+        if (!res.data.success)
         {
-          console.dir("RTMP STREAM INBOUND [preConnect]: [" + data + "]");
-          const uuidRegex = new RegExp(/(?<=releaseStream@.).+?(?=\?)+/g, "");
-          const streamkeyRegex = new RegExp(/key=(\w+)+/g, "");
-        
-	        const uuidMatch = data.match(uuidRegex);
-          const streamkeyMatch = data.match(streamkeyRegex);
-        
-	        if (!uuidMatch || !streamkeyMatch) session.reject();
+          Errors.push("SessID-denied");
+        } 
+    }).catch((error) => { session.reject(); });
 
-          let uuid = uuidMatch[0]; // index [0] == "UUID" index [1] == NULL
-          let streamkey = streamkeyMatch[1]; // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
-
-          const usernameExists = streamkey.match(/.+?(?=_)/g, "");
-          const randStrExists = streamkey.match(/_\w+/g, "");
-
-          if (usernameExists === null || randStrExists === null) session.reject();
-
-          const username = usernameExists[0]; // index [0] == "USERNAME" index [1] == "START OF RANDOM STRING"
-          const randStr  = randStrExists[0];  // index [0] == "RANDOM STRING" index [1] == NULL
-
-          console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
-          console.dir(`[[username: ${username}], [randStr: ${randStr}]]`);
-
-          axios
-          .post(AUTHURL, { uuid: uuid, user: username }) 
-          .then((res) => 
+    if (session.socket != null)
+    {
+      session.socket.on("data", (data) => 
+      {
+        if (data.toString("utf-8") != undefined) 
+        {
+          // use toString in order to get a string that we can manipulate
+          // replace all hex characters with blanks as hexadecimal is not a valid input for this section
+          // use trim to remove all leading and trailing whitespaces that can cause unexpected behavior
+          // slice to remove first 2 identification chars from packet data as they are insignificant for this section
+          data = data.toString("utf-8").replace(/[\x00-\x1F\x7F-\xA0]+/g, "").trim().slice(2); 
+     
+          if (data.startsWith("releaseStream@"))
           {
-              console.dir("RESPONSE FROM AUTH-API: " + JSON.stringify(res.data));
+            console.dir("RTMP STREAM INBOUND [preConnect]: [" + data + "]");
+            const uuidRegex = new RegExp(/(?<=releaseStream@.).+?(?=\?)+/g, "");
+            const streamkeyRegex = new RegExp(/key=(\w+)+/g, "");
+        
+	          const uuidMatch = data.match(uuidRegex);
+            const streamkeyMatch = data.match(streamkeyRegex);
+        
+	          if (!uuidMatch || !streamkeyMatch) session.reject();
+
+            let uuid = uuidMatch[0]; // index [0] == "UUID" index [1] == NULL
+            let streamkey = streamkeyMatch[1]; // index [0] == "key=KEYVALUE" index [1] == "KEYVALUE"
+
+            const usernameExists = streamkey.match(/.+?(?=_)/g, "");
+            const randStrExists = streamkey.match(/_\w+/g, "");
+
+            if (usernameExists === null || randStrExists === null) session.reject();
+
+            const username = usernameExists[0]; // index [0] == "USERNAME" index [1] == "START OF RANDOM STRING"
+            const randStr  = randStrExists[0].slice(1);  // index [0] == "_RANDOM STRING" index [1] == RANDOM STRING
+    
+            console.dir(`[[uuid: ${uuid}], [streamkey: ${streamkey}]]`);
+            console.dir(`[[username: ${username}], [randStr: ${randStr}]]`);
+
+            axios
+            .post(AUTHURL, { type: "preConnect", uuid: uuid, user: username, rand_str: randStr, SESSID: id }) 
+            .then((res) => 
+            {
               if (res.data.allow_access === true)
               {
-                  console.dir("[+] Authorized successfully . . .");
               } 
-	            else { session.reject(); }
-	        })
-          .catch((error) => {
-	        console.error("ERROR ON REQUEST TO AUTH-API: " + JSON.stringify(error));
-	        session.reject();
-	    });
-      }
-    } 
-  });
-  } catch(error) {
-    console.error("Error: " + error);
-  }
+	            else { Errors.push("ConnectAccess-Denied"); }
+	          }).catch((error) => { session.reject(); });
+          }
+        } 
+
+        if (Errors.length > 0) session.reject();
+      });
+    }
+  } catch (error) { session.reject(); }
 });
 
+NMServer.on("prePublish", (id, StreamPath, args) => 
+{
+  let session = NMServer.getSession(id);
+  var Errors = [];
+
+  axios
+  .post(AUTHURL, { type: "prePublish", SESSID: id })
+  .then((res) => 
+  {
+    if (res.data.allow_publish === true) 
+    {
+      let new_StreamPath = "/live/" + res.data.user;
+      session.playStreamPath = new_StreamPath
+      session.publishStreamPath = new_StreamPath;
+    } 
+    else { Errors.push("PublishAccess-Denied"); }
+  })
+  .catch((error) => { session.reject(); });
+
+  if (Errors.length > 0) session.reject();
+});
+
+NMServer.on('doneConnect', (id, args) => 
+{
+  let session = NMServer.getSession(id);
+  axios.post(AUTHURL, { type: "doneConnect", SESSID: id });
+});
