@@ -68,11 +68,11 @@ const Login = () => {
   return (
     <>
       {success ? (
-        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 bg-opacity-40 bg-gray-600">
           <p>You are logged in!</p>
         </section>
       ) : (
-        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 bg-opacity-40 bg-gray-600">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}

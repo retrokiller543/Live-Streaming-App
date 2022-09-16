@@ -130,14 +130,14 @@ const Register = () => {
   return (
     <>
       {success ? (
-        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 bg-opacity-40 bg-gray-600">
           <h1>Success!</h1>
           <p>
             <Link to="/login">Sign In</Link>
           </p>
         </section>
       ) : (
-        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 backdrop-opacity-40 ">
+        <section className="w-full max-w-s min-h-xs flex flex-col justify-start p-4 bg-opacity-40 bg-gray-600">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -148,7 +148,7 @@ const Register = () => {
           <h1>Register</h1>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-evenly flex-grow pb-4"
+            className="flex flex-col justify-evenly flex-grow pb-4 "
           >
             <label htmlFor="username">
               Username:
@@ -336,6 +336,7 @@ const Register = () => {
 
             <button
               disabled={!validName || !validPwd || !validMatch ? true : false}
+              className="mt-4 bg-light-gray"
             >
               Sign Up
             </button>
