@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { registerLicense } from "@syncfusion/ej2-base";
 
 import "./index.css";
@@ -18,7 +18,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ContextProvider>
-        <App />
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
       </ContextProvider>
     </BrowserRouter>
   </React.StrictMode>

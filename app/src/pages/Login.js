@@ -35,6 +35,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Login req");
     try {
       const response = await axios.post(
         LOGIN_URL,
@@ -47,19 +48,22 @@ const Login = () => {
           withCredentials: false,
         }
       );
+      console.log(response);
       const accessToken = response?.data?.accessToken;
+      console.log(accessToken);
       setAuth({ email, pwd, accessToken });
       setEmail("");
       setPwd("");
       setSuccess(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/users/user/profile");
+      console.log("Should Navigate now");
+      navigate("/");
       setSuccess(false);
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else {
-        setErrMsg("Login Failed");
+        setErrMsg(err?.response?.data);
+        console.log(err);
       }
       errRef.current.focus();
     }

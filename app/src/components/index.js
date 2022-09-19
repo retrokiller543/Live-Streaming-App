@@ -5,3 +5,5 @@ export { default as Navbar } from "./Navbar";
 export { default as Chat } from "./Chat";
 export { default as Notification } from "./Notification";
 export { default as Sidebar } from "./Sidebar";
+export { default as RequireAuth } from "./RequireAuth";
+export { default as Unauthorized } from "./Unauthorized";

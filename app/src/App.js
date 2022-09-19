@@ -5,14 +5,32 @@ import { axios } from "./api/index";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import { Register, Live, UserProfile, Login, Home } from "./pages/index";
-import { Sidebar, Navbar, Users } from "./components/index";
+import {
+  Register,
+  Live,
+  UserProfile,
+  Login,
+  Home,
+  NotFound,
+} from "./pages/index";
+import {
+  Sidebar,
+  Navbar,
+  Users,
+  RequireAuth,
+  Unauthorized,
+} from "./components/index";
 
 import { useStateContext } from "./contexts/ContextProvider";
 
 import "./App.css";
 
 const API_URL = "/api/user/retUsers";
+
+const ROLES = {
+  User: 2001,
+  Admin: 5150,
+};
 
 const App = () => {
   const { setUsers, activeMenu } = useStateContext();
@@ -69,13 +87,23 @@ const App = () => {
         <div>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route path="/users" element={<Users />} />
-            {/* Replace later */}
+            {/* Replace later with a browse video link */}
             <Route path="/users/videos" element={<Live />} />
             <Route path="/users/:user/profile" element={<UserProfile />} />
             <Route path="/users/:user/Live" element={<Live />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="unauthorized" element={<Unauthorized />} />
+
+            {/* Protected routes */}
+            <Route
+              element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}
+            >
+              <Route path="/users" element={<Users />} />
+            </Route>
+
+            {/* catch 404 errors */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </div>
