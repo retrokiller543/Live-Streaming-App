@@ -1,0 +1,12 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  .navbar {
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .sidebar {
+    width: 15%;
+  }
+}

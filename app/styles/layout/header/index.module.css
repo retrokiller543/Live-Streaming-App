@@ -1,0 +1,12 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+}
+.main .navbar {
+  width: 85%;
+  display: flex;
+  justify-content: space-between;
+}
+.main .sidebar {
+  width: 15%;
+}/*# sourceMappingURL=index.module.css.map */
